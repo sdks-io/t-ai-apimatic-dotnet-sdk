@@ -1,0 +1,141 @@
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
+using TogetherApIs.Core.Models;
+using TogetherApIs.Core.Validation.Attributes;
+using TogetherApIs.Models.AnyOf;
+
+namespace TogetherApIs.Models;
+
+public record CompletionRequest
+{
+    /// <summary>
+    /// A string providing context for the model to complete.
+    /// </summary>
+    [JsonPropertyName("prompt")]
+    public required string Prompt { get; init; }
+
+    /// <summary>
+    /// The name of the model to query.&lt;br&gt; &lt;br&gt; <see href="https://docs.together.ai/docs/serverless-models#chat-models">See all of Together AI's chat models</see>
+    /// </summary>
+    [JsonPropertyName("model")]
+    public required Model11 Model { get; init; }
+
+    /// <summary>
+    /// The maximum number of tokens to generate.
+    /// </summary>
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    [JsonPropertyName("max_tokens")]
+    public int? MaxTokens { get; init; }
+
+    /// <summary>
+    /// A list of string sequences that truncate (stop) inference text output. For example, "&lt;/s&gt;" stops generation as soon as the model generates the given token.
+    /// </summary>
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    [JsonPropertyName("stop")]
+    public IReadOnlyList<string>? Stop { get; init; }
+
+    /// <summary>
+    /// A decimal number from 0-1 that determines the degree of randomness in the response. A temperature less than 1 favors more correctness and is appropriate for question answering or summarization. A value closer to 1 introduces more randomness in the output.
+    /// </summary>
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    [JsonPropertyName("temperature")]
+    public double? Temperature { get; init; }
+
+    /// <summary>
+    /// A percentage (also called the nucleus parameter) that's used to dynamically adjust the number of choices for each predicted token based on the cumulative probabilities. It specifies a probability threshold below which all less likely tokens are filtered out. This technique helps maintain diversity and generate more fluent and natural-sounding text.
+    /// </summary>
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    [JsonPropertyName("top_p")]
+    public double? TopP { get; init; }
+
+    /// <summary>
+    /// An integer that's used to limit the number of choices for the next predicted word or token. It specifies the maximum number of tokens to consider at each step, based on their probability of occurrence. This technique helps to speed up the generation process and can improve the quality of the generated text by focusing on the most likely options.
+    /// </summary>
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    [JsonPropertyName("top_k")]
+    public int? TopK { get; init; }
+
+    /// <summary>
+    /// A number that controls the diversity of generated text by reducing the likelihood of repeated sequences. Higher values decrease repetition.
+    /// </summary>
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    [JsonPropertyName("repetition_penalty")]
+    public double? RepetitionPenalty { get; init; }
+
+    /// <summary>
+    /// If true, stream tokens as Server-Sent Events as the model generates them instead of waiting for the full model response. The stream terminates with <c>data: [DONE]</c>. If false, return a single JSON object containing the results.
+    /// </summary>
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    [JsonPropertyName("stream")]
+    public bool? Stream { get; init; }
+
+    /// <summary>
+    /// An integer between 0 and 20 of the top k tokens to return log probabilities for at each generation step, instead of only the sampled token. Log probabilities help assess model confidence in token predictions.
+    /// </summary>
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    [JsonPropertyName("logprobs")]
+    [Minimum(0)]
+    [Maximum(20)]
+    public int? Logprobs { get; init; }
+
+    /// <summary>
+    /// If true, the response contains the prompt. Can be used with <c>logprobs</c> to return prompt logprobs.
+    /// </summary>
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    [JsonPropertyName("echo")]
+    public bool? Echo { get; init; }
+
+    /// <summary>
+    /// The number of completions to generate for each prompt.
+    /// </summary>
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    [JsonPropertyName("n")]
+    [Minimum(1)]
+    [Maximum(128)]
+    public int? N { get; init; }
+
+    /// <summary>
+    /// The name of the moderation model used to validate tokens. Choose from the available moderation models found <see href="https://docs.together.ai/docs/inference-models#moderation-models">here</see>.
+    /// </summary>
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    [JsonPropertyName("safety_model")]
+    public SafetyModel1? SafetyModel { get; init; }
+
+    /// <summary>
+    /// A number between 0 and 1 that can be used as an alternative to top-p and top-k.
+    /// </summary>
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    [JsonPropertyName("min_p")]
+    public double? MinP { get; init; }
+
+    /// <summary>
+    /// A number between -2.0 and 2.0 where a positive value increases the likelihood of a model talking about new topics.
+    /// </summary>
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    [JsonPropertyName("presence_penalty")]
+    public double? PresencePenalty { get; init; }
+
+    /// <summary>
+    /// A number between -2.0 and 2.0 where a positive value decreases the likelihood of repeating tokens that have already been mentioned.
+    /// </summary>
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    [JsonPropertyName("frequency_penalty")]
+    public double? FrequencyPenalty { get; init; }
+
+    /// <summary>
+    /// Adjusts the likelihood of specific tokens appearing in the generated output.
+    /// </summary>
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    [JsonPropertyName("logit_bias")]
+    public IReadOnlyDictionary<string, double>? LogitBias { get; init; }
+
+    /// <summary>
+    /// Seed value for reproducibility.
+    /// </summary>
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    [JsonPropertyName("seed")]
+    public int? Seed { get; init; }
+
+    [JsonExtensionData]
+    public AdditionalProperties AdditionalProperties { get; init; } = [];
+}
